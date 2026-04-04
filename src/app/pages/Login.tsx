@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Shield, Mail, Lock, Eye, EyeOff } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useAppContext } from '../context/AppContext';
 
 export function Login() {
+  const { users, setCurrentUser } = useAppContext();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -12,11 +14,23 @@ export function Login() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would validate credentials
+
     if (userType === 'admin') {
-      navigate('/admin');
+      // Admin login - simplified authentication
+      if (email && password) {
+        navigate('/admin');
+      } else {
+        alert('Please enter credentials');
+      }
     } else {
-      navigate('/dashboard');
+      // Client login - find user by email
+      const user = users.find(u => u.email === email);
+      if (user && user.password === password) {
+        setCurrentUser(user);
+        navigate('/dashboard');
+      } else {
+        alert('Invalid credentials. Try: john@example.com / password123');
+      }
     }
   };
 

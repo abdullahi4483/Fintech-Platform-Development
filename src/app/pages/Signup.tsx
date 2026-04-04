@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { Shield, Mail, Lock, User, Eye, EyeOff, Phone } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useAppContext } from '../context/AppContext';
 
 export function Signup() {
+  const { addUser, setCurrentUser, users } = useAppContext();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -24,7 +26,27 @@ export function Signup() {
       alert('Please agree to the terms and conditions');
       return;
     }
-    // In a real app, this would create an account
+    if (users.find(u => u.email === email)) {
+      alert('Email already exists');
+      return;
+    }
+
+    // Create new user
+    addUser({
+      name: fullName,
+      email,
+      password,
+      balance: 0,
+      status: 'Active',
+      accountType: 'Basic'
+    });
+
+    // Find the newly created user and set as current
+    const newUser = users.find(u => u.email === email) || users[users.length - 1];
+    if (newUser) {
+      setCurrentUser(newUser);
+    }
+
     navigate('/dashboard');
   };
 

@@ -1,18 +1,10 @@
 import { Search, Filter, MoreVertical, X, User, Mail, DollarSign, Calendar, CreditCard, Shield, Edit, Trash2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { useState, useRef, useEffect } from 'react';
-
-interface UserType {
-  id: number;
-  name: string;
-  email: string;
-  balance: number;
-  status: 'Active' | 'Suspended';
-  joined: string;
-  accountType?: string;
-}
+import { useAppContext, UserType } from '../../context/AppContext';
 
 export function Users() {
+  const { users, addUser, updateUser, deleteUser } = useAppContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
@@ -26,18 +18,8 @@ export function Users() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [initialBalance, setInitialBalance] = useState('');
+  const [accountType, setAccountType] = useState<string>('Standard');
   const [status, setStatus] = useState<'Active' | 'Suspended'>('Active');
-
-  const users: UserType[] = [
-    { id: 1, name: 'John Anderson', email: 'john@example.com', balance: 125430, status: 'Active', joined: '2025-01-15', accountType: 'Premium' },
-    { id: 2, name: 'Sarah Williams', email: 'sarah@example.com', balance: 89250, status: 'Active', joined: '2025-02-20', accountType: 'Standard' },
-    { id: 3, name: 'Mike Johnson', email: 'mike@example.com', balance: 45680, status: 'Suspended', joined: '2024-11-10', accountType: 'Standard' },
-    { id: 4, name: 'Emily Davis', email: 'emily@example.com', balance: 156890, status: 'Active', joined: '2024-12-05', accountType: 'Premium' },
-    { id: 5, name: 'Tom Brown', email: 'tom@example.com', balance: 32100, status: 'Active', joined: '2026-01-08', accountType: 'Basic' },
-    { id: 6, name: 'Lisa Garcia', email: 'lisa@example.com', balance: 98450, status: 'Active', joined: '2025-03-12', accountType: 'Premium' },
-    { id: 7, name: 'David Martinez', email: 'david@example.com', balance: 67230, status: 'Suspended', joined: '2025-01-28', accountType: 'Standard' },
-    { id: 8, name: 'Jessica Wilson', email: 'jessica@example.com', balance: 142000, status: 'Active', joined: '2024-10-15', accountType: 'Premium' },
-  ];
 
   const handleAddUser = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,13 +27,20 @@ export function Users() {
       alert('Please fill in all fields');
       return;
     }
-    // In a real app, this would make an API call
-    console.log('Adding user:', { firstName, lastName, email, initialBalance, status });
+    addUser({
+      name: `${firstName} ${lastName}`,
+      email,
+      password: 'password123', // Default password
+      balance: parseFloat(initialBalance),
+      status,
+      accountType
+    });
     // Reset form
     setFirstName('');
     setLastName('');
     setEmail('');
     setInitialBalance('');
+    setAccountType('Standard');
     setStatus('Active');
     setShowAddModal(false);
   };
@@ -69,6 +58,7 @@ export function Users() {
     setLastName(last.join(' '));
     setEmail(user.email);
     setInitialBalance(user.balance.toString());
+    setAccountType(user.accountType || 'Standard');
     setStatus(user.status);
     setShowEditModal(true);
     setOpenDropdown(null);
@@ -82,25 +72,32 @@ export function Users() {
 
   const handleUpdateUser = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!firstName || !lastName || !email || !initialBalance) {
+    if (!firstName || !lastName || !email || !initialBalance || !selectedUser) {
       alert('Please fill in all fields');
       return;
     }
-    // In a real app, this would make an API call
-    console.log('Updating user:', { id: selectedUser?.id, firstName, lastName, email, balance: initialBalance, status });
+    updateUser(selectedUser.id, {
+      name: `${firstName} ${lastName}`,
+      email,
+      balance: parseFloat(initialBalance),
+      accountType,
+      status
+    });
     // Reset form
     setFirstName('');
     setLastName('');
     setEmail('');
     setInitialBalance('');
+    setAccountType('Standard');
     setStatus('Active');
     setShowEditModal(false);
     setSelectedUser(null);
   };
 
   const confirmDelete = () => {
-    // In a real app, this would make an API call
-    console.log('Deleting user:', selectedUser?.id);
+    if (selectedUser) {
+      deleteUser(selectedUser.id);
+    }
     setShowDeleteModal(false);
     setSelectedUser(null);
   };
@@ -367,6 +364,22 @@ export function Users() {
                         className="w-full pl-12 pr-4 py-3 rounded-lg bg-white/5 border border-[#c9a84c]/20 text-white placeholder:text-white/40 focus:border-[#c9a84c] focus:outline-none transition-all"
                       />
                     </div>
+                  </div>
+
+                  {/* Account Type */}
+                  <div>
+                    <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                      Account Type
+                    </label>
+                    <select
+                      value={accountType}
+                      onChange={(e) => setAccountType(e.target.value)}
+                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-[#c9a84c]/20 text-white focus:border-[#c9a84c] focus:outline-none transition-all appearance-none cursor-pointer"
+                    >
+                      <option value="Basic">Basic</option>
+                      <option value="Standard">Standard</option>
+                      <option value="Premium">Premium</option>
+                    </select>
                   </div>
 
                   {/* Status */}

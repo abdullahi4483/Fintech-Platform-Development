@@ -1,27 +1,17 @@
 import { Search, Filter, ArrowUpRight, ArrowDownRight } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState } from 'react';
+import { useAppContext } from '../../context/AppContext';
 
 export function AdminTransactions() {
+  const { transactions, users } = useAppContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterStatus, setFilterStatus] = useState('all');
 
-  const transactions = [
-    { id: 1, user: 'John Anderson', date: '2026-03-27 14:32', amount: 5000, type: 'Deposit', status: 'Completed' },
-    { id: 2, user: 'Sarah Williams', date: '2026-03-27 13:18', amount: -1200, type: 'Withdrawal', status: 'Completed' },
-    { id: 3, user: 'Mike Johnson', date: '2026-03-27 11:45', amount: -350, type: 'Transfer', status: 'Completed' },
-    { id: 4, user: 'Emily Davis', date: '2026-03-27 10:22', amount: 10000, type: 'Deposit', status: 'Completed' },
-    { id: 5, user: 'Tom Brown', date: '2026-03-27 09:15', amount: -500, type: 'Withdrawal', status: 'Pending' },
-    { id: 6, user: 'Lisa Garcia', date: '2026-03-26 18:40', amount: 2500, type: 'Deposit', status: 'Completed' },
-    { id: 7, user: 'David Martinez', date: '2026-03-26 16:55', amount: -750, type: 'Transfer', status: 'Completed' },
-    { id: 8, user: 'Jessica Wilson', date: '2026-03-26 14:20', amount: 8000, type: 'Deposit', status: 'Completed' },
-    { id: 9, user: 'John Anderson', date: '2026-03-26 12:10', amount: -200, type: 'Withdrawal', status: 'Completed' },
-    { id: 10, user: 'Sarah Williams', date: '2026-03-26 10:30', amount: -1500, type: 'Transfer', status: 'Failed' },
-  ];
-
   const filteredTransactions = transactions.filter((t) => {
-    const matchesSearch = t.user.toLowerCase().includes(searchTerm.toLowerCase());
+    const user = users.find(u => u.id === t.userId);
+    const matchesSearch = user?.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesType = filterType === 'all' || t.type.toLowerCase() === filterType.toLowerCase();
     const matchesStatus = filterStatus === 'all' || t.status.toLowerCase() === filterStatus.toLowerCase();
     return matchesSearch && matchesType && matchesStatus;
@@ -113,10 +103,10 @@ export function AdminTransactions() {
                     #{transaction.id.toString().padStart(5, '0')}
                   </td>
                   <td className="p-4" style={{ color: '#ffffff' }}>
-                    {transaction.user}
+                    {users.find(u => u.id === transaction.userId)?.name || 'Unknown'}
                   </td>
                   <td className="p-4" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                    {transaction.date}
+                    {transaction.date} {transaction.time}
                   </td>
                   <td className="p-4">
                     <div className="flex items-center gap-2">

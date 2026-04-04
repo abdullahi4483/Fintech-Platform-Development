@@ -1,21 +1,40 @@
 import { Users, DollarSign, TrendingUp, CreditCard } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useAppContext } from '../../context/AppContext';
 
 export function AdminOverview() {
+  const { users, transactions, withdrawals, messages } = useAppContext();
+
+  const totalBalance = users.reduce((sum, user) => sum + user.balance, 0);
+  const activeUsers = users.filter(u => u.status === 'Active').length;
+  const pendingWithdrawals = withdrawals.filter(w => w.status === 'Pending').length;
+  const totalTransactionValue = transactions
+    .filter(t => t.status === 'Completed' && t.amount > 0)
+    .reduce((sum, t) => sum + t.amount, 0);
+
   const stats = [
-    { label: 'Total Users', value: '12,458', icon: Users, change: '+12.5%', color: '#c9a84c' },
-    { label: 'Total Deposits', value: '$5.2M', icon: DollarSign, change: '+8.3%', color: '#10b981' },
-    { label: 'Pending Withdrawals', value: '23', icon: CreditCard, change: '-5.2%', color: '#3b82f6' },
-    { label: 'Revenue', value: '$125K', icon: TrendingUp, change: '+15.7%', color: '#c9a84c' },
+    { label: 'Total Users', value: users.length.toString(), icon: Users, change: `${activeUsers} active`, color: '#c9a84c' },
+    { label: 'Total Balance', value: `$${(totalBalance / 1000000).toFixed(1)}M`, icon: DollarSign, change: '+8.3%', color: '#10b981' },
+    { label: 'Pending Withdrawals', value: pendingWithdrawals.toString(), icon: CreditCard, change: `${withdrawals.length} total`, color: '#3b82f6' },
+    { label: 'Total Deposits', value: `$${(totalTransactionValue / 1000).toFixed(0)}K`, icon: TrendingUp, change: '+15.7%', color: '#c9a84c' },
   ];
 
   const recentActivity = [
-    { user: 'John Doe', action: 'Withdrawal Request', amount: '$5,000', time: '5 mins ago' },
-    { user: 'Jane Smith', action: 'New Account', amount: '-', time: '12 mins ago' },
-    { user: 'Mike Johnson', action: 'Deposit', amount: '$10,000', time: '23 mins ago' },
-    { user: 'Sarah Williams', action: 'Transfer', amount: '$2,500', time: '1 hour ago' },
-    { user: 'Tom Brown', action: 'Withdrawal Request', amount: '$3,200', time: '2 hours ago' },
-  ];
+    ...withdrawals.slice(0, 2).map(w => ({
+      user: w.userName,
+      action: 'Withdrawal Request',
+      amount: `$${w.amount.toLocaleString()}`,
+      time: w.requestDate,
+      status: w.status
+    })),
+    ...transactions.slice(0, 3).map(t => ({
+      user: users.find(u => u.id === t.userId)?.name || 'User',
+      action: t.type,
+      amount: `$${Math.abs(t.amount).toLocaleString()}`,
+      time: `${t.date} ${t.time}`,
+      status: t.status
+    }))
+  ].slice(0, 5);
 
   return (
     <div>

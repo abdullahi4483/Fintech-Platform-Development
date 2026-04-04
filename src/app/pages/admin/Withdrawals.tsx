@@ -1,38 +1,25 @@
 import { Search, CheckCircle, XCircle } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useState } from 'react';
+import { useAppContext } from '../../context/AppContext';
 
 export function Withdrawals() {
+  const { withdrawals, updateWithdrawal } = useAppContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
 
-  const [withdrawals, setWithdrawals] = useState([
-    { id: 1, user: 'Tom Brown', email: 'tom@example.com', amount: 5000, date: '2026-03-27 14:30', status: 'Pending' },
-    { id: 2, user: 'Sarah Williams', email: 'sarah@example.com', amount: 3200, date: '2026-03-27 12:15', status: 'Pending' },
-    { id: 3, user: 'Mike Johnson', email: 'mike@example.com', amount: 1500, date: '2026-03-27 10:20', status: 'Pending' },
-    { id: 4, user: 'John Anderson', email: 'john@example.com', amount: 10000, date: '2026-03-26 16:45', status: 'Approved' },
-    { id: 5, user: 'Emily Davis', email: 'emily@example.com', amount: 2500, date: '2026-03-26 14:30', status: 'Approved' },
-    { id: 6, user: 'Lisa Garcia', email: 'lisa@example.com', amount: 8000, date: '2026-03-26 11:20', status: 'Rejected' },
-    { id: 7, user: 'David Martinez', email: 'david@example.com', amount: 500, date: '2026-03-25 18:10', status: 'Approved' },
-    { id: 8, user: 'Jessica Wilson', email: 'jessica@example.com', amount: 7500, date: '2026-03-25 15:30', status: 'Pending' },
-  ]);
-
   const handleApprove = (id: number) => {
-    setWithdrawals((prev) =>
-      prev.map((w) => (w.id === id ? { ...w, status: 'Approved' } : w))
-    );
+    updateWithdrawal(id, 'Approved');
   };
 
   const handleReject = (id: number) => {
-    setWithdrawals((prev) =>
-      prev.map((w) => (w.id === id ? { ...w, status: 'Rejected' } : w))
-    );
+    updateWithdrawal(id, 'Rejected');
   };
 
   const filteredWithdrawals = withdrawals.filter((w) => {
     const matchesSearch =
-      w.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      w.email.toLowerCase().includes(searchTerm.toLowerCase());
+      w.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      w.userEmail.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = filterStatus === 'all' || w.status.toLowerCase() === filterStatus.toLowerCase();
     return matchesSearch && matchesStatus;
   });
@@ -164,16 +151,16 @@ export function Withdrawals() {
                     #{withdrawal.id.toString().padStart(5, '0')}
                   </td>
                   <td className="p-4" style={{ color: '#ffffff' }}>
-                    {withdrawal.user}
+                    {withdrawal.userName}
                   </td>
                   <td className="p-4" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
-                    {withdrawal.email}
+                    {withdrawal.userEmail}
                   </td>
                   <td className="p-4 text-right font-heading" style={{ fontSize: '16px', color: '#c9a84c' }}>
                     ${withdrawal.amount.toLocaleString()}
                   </td>
                   <td className="p-4 text-center" style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px' }}>
-                    {withdrawal.date}
+                    {withdrawal.requestDate}
                   </td>
                   <td className="p-4 text-center">
                     <span

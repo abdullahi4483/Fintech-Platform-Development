@@ -1,88 +1,21 @@
 import { useState } from 'react';
 import { Search, Filter, MessageCircle, Mail, Clock, CheckCircle, X } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useAppContext, MessageType } from '../../context/AppContext';
 
 export function Messages() {
+  const { messages, updateMessage } = useAppContext();
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
-  const [selectedMessage, setSelectedMessage] = useState<number | null>(null);
-
-  const messages = [
-    {
-      id: 1,
-      user: 'John Anderson',
-      email: 'john@example.com',
-      category: 'Withdrawal Request',
-      subject: 'Urgent withdrawal verification needed',
-      message: 'I submitted a withdrawal request for $5,000 3 days ago and need it processed urgently. Can you help expedite this?',
-      status: 'Pending',
-      date: '2026-03-27',
-      time: '10:30 AM',
-    },
-    {
-      id: 2,
-      user: 'Sarah Williams',
-      email: 'sarah@example.com',
-      category: 'Account Issue',
-      subject: 'Cannot access my account',
-      message: 'I\'ve been locked out of my account after multiple failed login attempts. Please help me regain access.',
-      status: 'Pending',
-      date: '2026-03-27',
-      time: '09:15 AM',
-    },
-    {
-      id: 3,
-      user: 'Mike Johnson',
-      email: 'mike@example.com',
-      category: 'Transaction Problem',
-      subject: 'Transaction not reflecting in my account',
-      message: 'I made a deposit of $2,000 yesterday but it\'s still not showing in my account balance. Transaction ID: TXN123456',
-      status: 'Replied',
-      date: '2026-03-26',
-      time: '04:20 PM',
-    },
-    {
-      id: 4,
-      user: 'Emily Davis',
-      email: 'emily@example.com',
-      category: 'Technical Support',
-      subject: 'Mobile app crashes on login',
-      message: 'The mobile app keeps crashing whenever I try to log in. I\'m using an iPhone 14 with the latest iOS version.',
-      status: 'Resolved',
-      date: '2026-03-26',
-      time: '02:45 PM',
-    },
-    {
-      id: 5,
-      user: 'Tom Brown',
-      email: 'tom@example.com',
-      category: 'General Inquiry',
-      subject: 'Question about account limits',
-      message: 'What are the daily transaction limits for premium accounts? I need to make a large transfer next week.',
-      status: 'Replied',
-      date: '2026-03-25',
-      time: '11:30 AM',
-    },
-    {
-      id: 6,
-      user: 'Lisa Garcia',
-      email: 'lisa@example.com',
-      category: 'Withdrawal Request',
-      subject: 'Withdrawal documentation required',
-      message: 'I need to withdraw $15,000 for an emergency. What documentation do you need from me?',
-      status: 'Pending',
-      date: '2026-03-25',
-      time: '09:00 AM',
-    },
-  ];
+  const [selectedMessage, setSelectedMessage] = useState<MessageType | null>(null);
 
   const filteredMessages = messages.filter((msg) => {
     const matchesSearch =
       msg.user.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      msg.subject.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      msg.category.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterStatus === 'all' || msg.status.toLowerCase() === filterStatus.toLowerCase();
-    return matchesSearch && matchesFilter;
+      msg.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      msg.subject.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = filterStatus === 'all' || msg.status.toLowerCase() === filterStatus.toLowerCase();
+    return matchesSearch && matchesStatus;
   });
 
   const stats = {
@@ -262,13 +195,26 @@ export function Messages() {
                   <td className="p-4">
                     <div className="flex items-center justify-center gap-2">
                       <button
-                        onClick={() => setSelectedMessage(msg.id)}
+                        onClick={() => setSelectedMessage(msg)}
                         className="px-3 py-1 rounded bg-[#3b82f6]/20 text-[#3b82f6] hover:bg-[#3b82f6]/30 transition-all text-sm"
                       >
                         View
                       </button>
-                      <button className="px-3 py-1 rounded bg-[#c9a84c]/20 text-[#c9a84c] hover:bg-[#c9a84c]/30 transition-all text-sm">
-                        Reply
+                      <button
+                        onClick={() => {
+                          updateMessage(msg.id, 'Replied');
+                        }}
+                        className="px-3 py-1 rounded bg-[#c9a84c]/20 text-[#c9a84c] hover:bg-[#c9a84c]/30 transition-all text-sm"
+                      >
+                        Mark Replied
+                      </button>
+                      <button
+                        onClick={() => {
+                          updateMessage(msg.id, 'Resolved');
+                        }}
+                        className="px-3 py-1 rounded bg-[#10b981]/20 text-[#10b981] hover:bg-[#10b981]/30 transition-all text-sm"
+                      >
+                        Mark Resolved
                       </button>
                     </div>
                   </td>
@@ -298,49 +244,52 @@ export function Messages() {
               <X className="w-5 h-5 text-white/70" />
             </button>
 
-            {(() => {
-              const msg = messages.find((m) => m.id === selectedMessage);
-              if (!msg) return null;
+            <div className="mb-6">
+              <h2 className="font-heading mb-2" style={{ fontSize: '28px', color: '#ffffff' }}>
+                {selectedMessage.subject}
+              </h2>
+              <div className="flex items-center gap-4" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                <span>From: {selectedMessage.user}</span>
+                <span>•</span>
+                <span>{selectedMessage.email}</span>
+              </div>
+              <div className="flex items-center gap-4 mt-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
+                <span>{selectedMessage.date} at {selectedMessage.time}</span>
+                <span className="px-2 py-1 rounded bg-[#c9a84c]/20 text-[#c9a84c] text-sm">{selectedMessage.category}</span>
+              </div>
+            </div>
 
-              return (
-                <>
-                  <div className="mb-6">
-                    <h2 className="font-heading mb-2" style={{ fontSize: '28px', color: '#ffffff' }}>
-                      {msg.subject}
-                    </h2>
-                    <div className="flex items-center gap-4" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                      <span>From: {msg.user}</span>
-                      <span>•</span>
-                      <span>{msg.email}</span>
-                    </div>
-                    <div className="flex items-center gap-4 mt-2" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>
-                      <span>{msg.date} at {msg.time}</span>
-                      <span className="px-2 py-1 rounded bg-[#c9a84c]/20 text-[#c9a84c] text-sm">{msg.category}</span>
-                    </div>
-                  </div>
+            <div className="mb-6 p-4 rounded-lg bg-white/5">
+              <p style={{ color: 'rgba(255, 255, 255, 0.8)', lineHeight: '1.6' }}>{selectedMessage.message}</p>
+            </div>
 
-                  <div className="mb-6 p-4 rounded-lg bg-white/5">
-                    <p style={{ color: 'rgba(255, 255, 255, 0.8)', lineHeight: '1.6' }}>{msg.message}</p>
-                  </div>
-
-                  <div className="space-y-3">
-                    <textarea
-                      placeholder="Type your reply here..."
-                      rows={4}
-                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-[#c9a84c]/20 text-white placeholder:text-white/40 focus:border-[#c9a84c] focus:outline-none transition-all resize-none"
-                    />
-                    <div className="flex gap-3">
-                      <button className="flex-1 px-6 py-3 bg-[#c9a84c] text-[#0a0e1a] rounded-lg hover:bg-[#b89640] transition-all hover:scale-105">
-                        Send Reply
-                      </button>
-                      <button className="px-6 py-3 border border-[#10b981]/40 text-[#10b981] rounded-lg hover:border-[#10b981] transition-all">
-                        Mark Resolved
-                      </button>
-                    </div>
-                  </div>
-                </>
-              );
-            })()}
+            <div className="space-y-3">
+              <textarea
+                placeholder="Type your reply here..."
+                rows={4}
+                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-[#c9a84c]/20 text-white placeholder:text-white/40 focus:border-[#c9a84c] focus:outline-none transition-all resize-none"
+              />
+              <div className="flex gap-3">
+                <button
+                  onClick={() => {
+                    updateMessage(selectedMessage.id, 'Replied');
+                    setSelectedMessage(null);
+                  }}
+                  className="flex-1 px-6 py-3 bg-[#c9a84c] text-[#0a0e1a] rounded-lg hover:bg-[#b89640] transition-all hover:scale-105"
+                >
+                  Send Reply
+                </button>
+                <button
+                  onClick={() => {
+                    updateMessage(selectedMessage.id, 'Resolved');
+                    setSelectedMessage(null);
+                  }}
+                  className="px-6 py-3 border border-[#10b981]/40 text-[#10b981] rounded-lg hover:border-[#10b981] transition-all"
+                >
+                  Mark Resolved
+                </button>
+              </div>
+            </div>
           </motion.div>
         </div>
       )}

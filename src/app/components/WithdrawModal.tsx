@@ -1,5 +1,7 @@
 import { X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { useState } from 'react';
+import { useAppContext } from '../context/AppContext';
 
 interface WithdrawModalProps {
   isOpen: boolean;
@@ -7,6 +9,38 @@ interface WithdrawModalProps {
 }
 
 export function WithdrawModal({ isOpen, onClose }: WithdrawModalProps) {
+  const { currentUser, addWithdrawal } = useAppContext();
+  const [amount, setAmount] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!currentUser || !amount || parseFloat(amount) <= 0) {
+      alert('Please enter a valid amount');
+      return;
+    }
+
+    if (parseFloat(amount) > currentUser.balance) {
+      alert('Insufficient balance');
+      return;
+    }
+
+    addWithdrawal({
+      userId: currentUser.id,
+      userName: currentUser.name,
+      userEmail: currentUser.email,
+      amount: parseFloat(amount),
+      status: 'Pending'
+    });
+
+    setSubmitted(true);
+    setTimeout(() => {
+      setSubmitted(false);
+      setAmount('');
+      onClose();
+    }, 2000);
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -37,39 +71,69 @@ export function WithdrawModal({ isOpen, onClose }: WithdrawModalProps) {
               </button>
 
               {/* Content */}
-              <div className="text-center">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#c9a84c]/20 flex items-center justify-center">
-                  <div className="w-12 h-12 rounded-full bg-[#c9a84c]/30 flex items-center justify-center">
-                    <div className="text-[#c9a84c]" style={{ fontSize: '24px' }}>
-                      💰
+              {submitted ? (
+                <div className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#10b981]/20 flex items-center justify-center">
+                    <div className="text-[#10b981]" style={{ fontSize: '32px' }}>
+                      ✓
                     </div>
                   </div>
+                  <h2 className="font-heading mb-4" style={{ fontSize: '28px', color: '#ffffff' }}>
+                    Request Submitted
+                  </h2>
+                  <p style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                    Your withdrawal request is being processed
+                  </p>
                 </div>
+              ) : (
+                <form onSubmit={handleSubmit}>
+                  <div className="text-center mb-6">
+                    <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-[#c9a84c]/20 flex items-center justify-center">
+                      <div className="text-[#c9a84c]" style={{ fontSize: '24px' }}>
+                        💰
+                      </div>
+                    </div>
 
-                <h2 className="font-heading mb-4" style={{ fontSize: '28px', color: '#ffffff' }}>
-                  Withdrawal Request
-                </h2>
+                    <h2 className="font-heading mb-2" style={{ fontSize: '28px', color: '#ffffff' }}>
+                      Withdrawal Request
+                    </h2>
+                    <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)' }}>
+                      Available Balance: ${currentUser?.balance.toLocaleString() || '0'}
+                    </p>
+                  </div>
 
-                <p className="mb-8" style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: '1.6' }}>
-                  To proceed with your withdrawal, please contact customer service for verification.
-                </p>
+                  <div className="mb-6">
+                    <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                      Withdrawal Amount
+                    </label>
+                    <input
+                      type="number"
+                      value={amount}
+                      onChange={(e) => setAmount(e.target.value)}
+                      placeholder="0.00"
+                      required
+                      min="1"
+                      step="0.01"
+                      className="w-full px-4 py-3 rounded-lg bg-white/5 border border-[#c9a84c]/20 text-white placeholder:text-white/40 focus:border-[#c9a84c] focus:outline-none transition-all"
+                    />
+                  </div>
 
-                <button
-                  onClick={() => {
-                    window.location.href = 'mailto:support@fintech.com';
-                  }}
-                  className="w-full px-6 py-3 bg-[#c9a84c] text-[#0a0e1a] rounded-lg hover:bg-[#b89640] transition-all hover:scale-105"
-                >
-                  Contact Support
-                </button>
+                  <button
+                    type="submit"
+                    className="w-full px-6 py-3 bg-[#c9a84c] text-[#0a0e1a] rounded-lg hover:bg-[#b89640] transition-all hover:scale-105"
+                  >
+                    Submit Request
+                  </button>
 
-                <button
-                  onClick={onClose}
-                  className="mt-3 w-full px-6 py-3 border border-[#c9a84c]/40 text-white rounded-lg hover:border-[#c9a84c] transition-all"
-                >
-                  Cancel
-                </button>
-              </div>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="mt-3 w-full px-6 py-3 border border-[#c9a84c]/40 text-white rounded-lg hover:border-[#c9a84c] transition-all"
+                  >
+                    Cancel
+                  </button>
+                </form>
+              )}
             </div>
           </motion.div>
         </>

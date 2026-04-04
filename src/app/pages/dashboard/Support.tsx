@@ -1,21 +1,37 @@
 import { useState } from 'react';
 import { Send, MessageCircle, Mail, Phone } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useAppContext } from '../../context/AppContext';
 
 export function Support() {
+  const { currentUser, addMessage } = useAppContext();
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
-  const [category, setCategory] = useState('general');
+  const [category, setCategory] = useState('General');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would send the message to admin
+
+    if (!currentUser) {
+      alert('Please log in first');
+      return;
+    }
+
+    addMessage({
+      userId: currentUser.id,
+      user: currentUser.name,
+      email: currentUser.email,
+      category,
+      subject,
+      message
+    });
+
     setSubmitted(true);
     setTimeout(() => {
       setSubject('');
       setMessage('');
-      setCategory('general');
+      setCategory('General');
       setSubmitted(false);
     }, 3000);
   };

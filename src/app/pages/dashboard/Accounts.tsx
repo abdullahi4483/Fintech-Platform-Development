@@ -1,13 +1,16 @@
 import { Wallet, TrendingUp } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useAppContext } from '../../context/AppContext';
 
 export function Accounts() {
+  const { currentUser } = useAppContext();
+
   const accounts = [
     {
       id: 1,
       name: 'Savings Account',
       type: 'Savings',
-      balance: 85240.0,
+      balance: currentUser ? currentUser.balance * 0.68 : 0,
       growth: '+8.2%',
       accountNumber: '****5678',
     },
@@ -15,17 +18,9 @@ export function Accounts() {
       id: 2,
       name: 'Current Account',
       type: 'Current',
-      balance: 40190.0,
+      balance: currentUser ? currentUser.balance * 0.32 : 0,
       growth: '+5.1%',
       accountNumber: '****1234',
-    },
-    {
-      id: 3,
-      name: 'Investment Account',
-      type: 'Investment',
-      balance: 52340.0,
-      growth: '+15.3%',
-      accountNumber: '****9012',
     },
   ];
 

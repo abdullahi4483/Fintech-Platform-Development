@@ -2,16 +2,15 @@ import { useState } from 'react';
 import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, DollarSign, CreditCard, Wallet } from 'lucide-react';
 import { motion } from 'motion/react';
 import { WithdrawModal } from '../../components/WithdrawModal';
+import { useAppContext } from '../../context/AppContext';
 
 export function DashboardOverview() {
+  const { currentUser, transactions } = useAppContext();
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
 
-  const recentTransactions = [
-    { id: 1, type: 'Deposit', amount: 5000, date: '2026-03-27', status: 'Completed' },
-    { id: 2, type: 'Withdrawal', amount: -1200, date: '2026-03-26', status: 'Completed' },
-    { id: 3, type: 'Transfer', amount: -350, date: '2026-03-25', status: 'Completed' },
-    { id: 4, type: 'Deposit', amount: 2500, date: '2026-03-24', status: 'Completed' },
-  ];
+  const userTransactions = currentUser
+    ? transactions.filter(t => t.userId === currentUser.id).slice(0, 4)
+    : [];
 
   return (
     <div>
@@ -19,7 +18,7 @@ export function DashboardOverview() {
         <h1 className="font-heading mb-2" style={{ fontSize: '36px', color: '#ffffff' }}>
           Dashboard
         </h1>
-        <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Welcome back, John Anderson</p>
+        <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Welcome back, {currentUser?.name || 'User'}</p>
       </div>
 
       {/* Balance Card */}
@@ -34,7 +33,7 @@ export function DashboardOverview() {
             Total Balance
           </div>
           <div className="font-heading mb-6" style={{ fontSize: '48px', color: '#0a0e1a' }}>
-            $125,430.00
+            ${currentUser?.balance.toLocaleString('en-US', { minimumFractionDigits: 2 }) || '0.00'}
           </div>
           <div className="flex items-center gap-2" style={{ color: '#0a0e1a', opacity: 0.8 }}>
             <TrendingUp className="w-5 h-5" />
@@ -159,42 +158,48 @@ export function DashboardOverview() {
           Recent Transactions
         </h2>
         <div className="space-y-4">
-          {recentTransactions.map((transaction) => (
-            <div
-              key={transaction.id}
-              className="flex items-center justify-between p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all"
-            >
-              <div className="flex items-center gap-4">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                    transaction.amount > 0 ? 'bg-[#10b981]/20' : 'bg-[#ef4444]/20'
-                  }`}
-                >
-                  {transaction.amount > 0 ? (
-                    <ArrowDownRight className="w-5 h-5 text-[#10b981]" />
-                  ) : (
-                    <ArrowUpRight className="w-5 h-5 text-[#ef4444]" />
-                  )}
+          {userTransactions.length > 0 ? (
+            userTransactions.map((transaction) => (
+              <div
+                key={transaction.id}
+                className="flex items-center justify-between p-4 rounded-lg bg-white/5 hover:bg-white/10 transition-all"
+              >
+                <div className="flex items-center gap-4">
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center ${
+                      transaction.amount > 0 ? 'bg-[#10b981]/20' : 'bg-[#ef4444]/20'
+                    }`}
+                  >
+                    {transaction.amount > 0 ? (
+                      <ArrowDownRight className="w-5 h-5 text-[#10b981]" />
+                    ) : (
+                      <ArrowUpRight className="w-5 h-5 text-[#ef4444]" />
+                    )}
+                  </div>
+                  <div>
+                    <div style={{ color: '#ffffff' }}>{transaction.description}</div>
+                    <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>{transaction.date} {transaction.time}</div>
+                  </div>
                 </div>
-                <div>
-                  <div style={{ color: '#ffffff' }}>{transaction.type}</div>
-                  <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>{transaction.date}</div>
+                <div className="text-right">
+                  <div
+                    className="font-heading"
+                    style={{
+                      fontSize: '18px',
+                      color: transaction.amount > 0 ? '#10b981' : '#ef4444',
+                    }}
+                  >
+                    {transaction.amount > 0 ? '+' : ''}${Math.abs(transaction.amount).toLocaleString()}
+                  </div>
+                  <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>{transaction.status}</div>
                 </div>
               </div>
-              <div className="text-right">
-                <div
-                  className="font-heading"
-                  style={{
-                    fontSize: '18px',
-                    color: transaction.amount > 0 ? '#10b981' : '#ef4444',
-                  }}
-                >
-                  {transaction.amount > 0 ? '+' : ''}${Math.abs(transaction.amount).toLocaleString()}
-                </div>
-                <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>{transaction.status}</div>
-              </div>
+            ))
+          ) : (
+            <div className="text-center py-8" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+              No recent transactions
             </div>
-          ))}
+          )}
         </div>
       </motion.div>
 
