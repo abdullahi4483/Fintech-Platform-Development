@@ -1,35 +1,35 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router';
-import { Shield, Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { motion } from 'motion/react';
-import { useAppContext } from '../context/AppContext';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { Shield, Mail, Lock, Eye, EyeOff } from "lucide-react";
+import { motion } from "motion/react";
+import { useAppContext } from "../context/AppContext";
 
 export function Login() {
   const { users, setCurrentUser } = useAppContext();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [userType, setUserType] = useState<'client' | 'admin'>('client');
+  const [userType, setUserType] = useState<"client" | "admin">("client");
   const navigate = useNavigate();
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (userType === 'admin') {
+    if (userType === "admin") {
       // Admin login - simplified authentication
       if (email && password) {
-        navigate('/admin');
+        navigate("/admin");
       } else {
-        alert('Please enter credentials');
+        alert("Please enter credentials");
       }
     } else {
       // Client login - find user by email
-      const user = users.find(u => u.email === email);
+      const user = users.find((u) => u.email === email);
       if (user && user.password === password) {
         setCurrentUser(user);
-        navigate('/dashboard');
+        navigate("/dashboard");
       } else {
-        alert('Invalid credentials. Try: john@example.com / password123');
+        alert("Invalid credentials. Try: john@example.com / password123");
       }
     }
   };
@@ -52,14 +52,22 @@ export function Login() {
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#c9a84c] to-[#3b82f6] flex items-center justify-center">
               <Shield className="w-6 h-6 text-[#0a0e1a]" />
             </div>
-            <span className="font-heading" style={{ fontSize: '28px', color: '#c9a84c' }}>
+            <span
+              className="font-heading"
+              style={{ fontSize: "28px", color: "#c9a84c" }}
+            >
               Fintech
             </span>
           </Link>
-          <h1 className="font-heading mb-2" style={{ fontSize: '32px', color: '#ffffff' }}>
+          <h1
+            className="font-heading mb-2"
+            style={{ fontSize: "32px", color: "#ffffff" }}
+          >
             Welcome Back
           </h1>
-          <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Sign in to your account</p>
+          <p style={{ color: "rgba(255, 255, 255, 0.6)" }}>
+            Sign in to your account
+          </p>
         </div>
 
         {/* Login Form */}
@@ -68,16 +76,16 @@ export function Login() {
           <div className="flex gap-2 mb-6 p-1 rounded-lg bg-white/5">
             <button
               type="button"
-              onClick={() => setUserType('client')}
+              onClick={() => setUserType("client")}
               className={`flex-1 py-2 rounded-md transition-all ${
-                userType === 'client'
-                  ? 'bg-[#c9a84c] text-[#0a0e1a]'
-                  : 'text-white/60 hover:text-white'
+                userType === "client"
+                  ? "bg-[#c9a84c] text-[#0a0e1a]"
+                  : "text-white/60 hover:text-white"
               }`}
             >
               Client
             </button>
-            <button
+            {/* <button
               type="button"
               onClick={() => setUserType('admin')}
               className={`flex-1 py-2 rounded-md transition-all ${
@@ -87,13 +95,16 @@ export function Login() {
               }`}
             >
               Admin
-            </button>
+            </button> */}
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
             {/* Email */}
             <div>
-              <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <label
+                className="block mb-2"
+                style={{ color: "rgba(255, 255, 255, 0.7)" }}
+              >
                 Email Address
               </label>
               <div className="relative">
@@ -111,13 +122,16 @@ export function Login() {
 
             {/* Password */}
             <div>
-              <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <label
+                className="block mb-2"
+                style={{ color: "rgba(255, 255, 255, 0.7)" }}
+              >
                 Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter your password"
@@ -129,7 +143,11 @@ export function Login() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -137,12 +155,24 @@ export function Login() {
             {/* Remember & Forgot */}
             <div className="flex items-center justify-between">
               <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="w-4 h-4 rounded border-[#c9a84c]/20" />
-                <span style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 rounded border-[#c9a84c]/20"
+                />
+                <span
+                  style={{
+                    fontSize: "14px",
+                    color: "rgba(255, 255, 255, 0.7)",
+                  }}
+                >
                   Remember me
                 </span>
               </label>
-              <a href="#" className="text-[#c9a84c] hover:text-[#b89640] transition-colors" style={{ fontSize: '14px' }}>
+              <a
+                href="#"
+                className="text-[#c9a84c] hover:text-[#b89640] transition-colors"
+                style={{ fontSize: "14px" }}
+              >
                 Forgot password?
               </a>
             </div>
@@ -158,8 +188,13 @@ export function Login() {
 
           {/* Sign Up Link */}
           <div className="mt-6 text-center">
-            <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Don't have an account? </span>
-            <Link to="/signup" className="text-[#c9a84c] hover:text-[#b89640] transition-colors">
+            <span style={{ color: "rgba(255, 255, 255, 0.6)" }}>
+              Don't have an account?{" "}
+            </span>
+            <Link
+              to="/signup"
+              className="text-[#c9a84c] hover:text-[#b89640] transition-colors"
+            >
               Sign up
             </Link>
           </div>
@@ -167,7 +202,10 @@ export function Login() {
 
         {/* Back to Home */}
         <div className="mt-6 text-center">
-          <Link to="/" className="text-white/60 hover:text-[#c9a84c] transition-colors">
+          <Link
+            to="/"
+            className="text-white/60 hover:text-[#c9a84c] transition-colors"
+          >
             ← Back to Home
           </Link>
         </div>
