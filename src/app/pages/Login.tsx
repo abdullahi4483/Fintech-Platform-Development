@@ -16,20 +16,18 @@ export function Login() {
     e.preventDefault();
 
     if (userType === "admin") {
-      // Admin login - simplified authentication
-      if (email && password) {
+      if (email === "admin@gmail.com" && password === "12345678") {
         navigate("/admin");
       } else {
-        alert("Please enter credentials");
+        alert("Please enter valid admin credentials");
       }
     } else {
-      // Client login - find user by email
       const user = users.find((u) => u.email === email);
       if (user && user.password === password) {
         setCurrentUser(user);
         navigate("/dashboard");
       } else {
-        alert("Invalid credentials. Try: john@example.com / password123");
+        alert("Invalid credentials.");
       }
     }
   };
@@ -85,17 +83,17 @@ export function Login() {
             >
               Client
             </button>
-            {/* <button
+            <button
               type="button"
-              onClick={() => setUserType('admin')}
+              onClick={() => setUserType("admin")}
               className={`flex-1 py-2 rounded-md transition-all ${
-                userType === 'admin'
-                  ? 'bg-[#c9a84c] text-[#0a0e1a]'
-                  : 'text-white/60 hover:text-white'
+                userType === "admin"
+                  ? "bg-[#c9a84c] text-[#0a0e1a]"
+                  : "text-white/60 hover:text-white"
               }`}
             >
               Admin
-            </button> */}
+            </button>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-4">
