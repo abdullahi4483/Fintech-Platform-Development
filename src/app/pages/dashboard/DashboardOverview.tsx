@@ -1,24 +1,36 @@
-import { useState } from 'react';
-import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, DollarSign, CreditCard, Wallet } from 'lucide-react';
-import { motion } from 'motion/react';
-import { WithdrawModal } from '../../components/WithdrawModal';
-import { useAppContext } from '../../context/AppContext';
-
+import { useState } from "react";
+import {
+  TrendingUp,
+  TrendingDown,
+  ArrowUpRight,
+  ArrowDownRight,
+  DollarSign,
+  CreditCard,
+  Wallet,
+} from "lucide-react";
+import { motion } from "motion/react";
+import { WithdrawModal } from "../../components/WithdrawModal";
+import { useAppContext } from "../../context/AppContext";
 export function DashboardOverview() {
   const { currentUser, transactions } = useAppContext();
   const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
 
   const userTransactions = currentUser
-    ? transactions.filter(t => t.userId === currentUser.id).slice(0, 4)
+    ? transactions.filter((t) => t.userId === currentUser.id).slice(0, 4)
     : [];
 
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-heading mb-2" style={{ fontSize: '36px', color: '#ffffff' }}>
+        <h1
+          className="font-heading mb-2"
+          style={{ fontSize: "36px", color: "#ffffff" }}
+        >
           Dashboard
         </h1>
-        <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Welcome back, {currentUser?.name || 'User'}</p>
+        <p style={{ color: "rgba(255, 255, 255, 0.6)" }}>
+          Welcome back, {currentUser?.name || "User"}
+        </p>
       </div>
 
       {/* Balance Card */}
@@ -29,13 +41,22 @@ export function DashboardOverview() {
       >
         <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-transparent" />
         <div className="relative">
-          <div style={{ color: '#0a0e1a', opacity: 0.7 }} className="mb-2">
+          <div style={{ color: "#0a0e1a", opacity: 0.7 }} className="mb-2">
             Total Balance
           </div>
-          <div className="font-heading mb-6" style={{ fontSize: '48px', color: '#0a0e1a' }}>
-            ${currentUser?.balance.toLocaleString('en-US', { minimumFractionDigits: 2 }) || '0.00'}
+          <div
+            className="font-heading mb-6"
+            style={{ fontSize: "48px", color: "#0a0e1a" }}
+          >
+            $
+            {currentUser?.balance.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+            }) || "0.00"}
           </div>
-          <div className="flex items-center gap-2" style={{ color: '#0a0e1a', opacity: 0.8 }}>
+          <div
+            className="flex items-center gap-2"
+            style={{ color: "#0a0e1a", opacity: 0.8 }}
+          >
             <TrendingUp className="w-5 h-5" />
             <span>+12.5% from last month</span>
           </div>
@@ -51,10 +72,15 @@ export function DashboardOverview() {
           className="p-6 rounded-xl bg-gradient-to-br from-[#141e32]/60 to-[#0a0e1a]/60 backdrop-blur-xl border border-[#c9a84c]/20 hover:border-[#c9a84c]/50 transition-all text-left"
         >
           <ArrowDownRight className="w-8 h-8 text-[#10b981] mb-3" />
-          <div className="font-heading" style={{ fontSize: '18px', color: '#ffffff' }}>
+          <div
+            className="font-heading"
+            style={{ fontSize: "18px", color: "#ffffff" }}
+          >
             Deposit
           </div>
-          <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)' }}>Add funds to your account</p>
+          <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.6)" }}>
+            Add funds to your account
+          </p>
         </motion.button>
 
         <motion.button
@@ -65,10 +91,15 @@ export function DashboardOverview() {
           className="p-6 rounded-xl bg-gradient-to-br from-[#141e32]/60 to-[#0a0e1a]/60 backdrop-blur-xl border border-[#c9a84c]/20 hover:border-[#c9a84c]/50 transition-all text-left"
         >
           <ArrowUpRight className="w-8 h-8 text-[#3b82f6] mb-3" />
-          <div className="font-heading" style={{ fontSize: '18px', color: '#ffffff' }}>
+          <div
+            className="font-heading"
+            style={{ fontSize: "18px", color: "#ffffff" }}
+          >
             Transfer
           </div>
-          <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)' }}>Send money to others</p>
+          <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.6)" }}>
+            Send money to others
+          </p>
         </motion.button>
 
         <motion.button
@@ -80,10 +111,15 @@ export function DashboardOverview() {
           className="p-6 rounded-xl bg-gradient-to-br from-[#141e32]/60 to-[#0a0e1a]/60 backdrop-blur-xl border border-[#c9a84c]/20 hover:border-[#c9a84c]/50 transition-all text-left"
         >
           <ArrowUpRight className="w-8 h-8 text-[#c9a84c] mb-3" />
-          <div className="font-heading" style={{ fontSize: '18px', color: '#ffffff' }}>
+          <div
+            className="font-heading"
+            style={{ fontSize: "18px", color: "#ffffff" }}
+          >
             Withdraw
           </div>
-          <p style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.6)' }}>Request withdrawal</p>
+          <p style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.6)" }}>
+            Request withdrawal
+          </p>
         </motion.button>
       </div>
 
@@ -96,13 +132,24 @@ export function DashboardOverview() {
           className="p-6 rounded-xl bg-gradient-to-br from-[#141e32]/60 to-[#0a0e1a]/60 backdrop-blur-xl border border-[#c9a84c]/20"
         >
           <div className="flex items-center justify-between mb-4">
-            <div style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Savings Account</div>
+            <div style={{ color: "rgba(255, 255, 255, 0.7)" }}>
+              Savings Account
+            </div>
             <Wallet className="w-5 h-5 text-[#c9a84c]" />
           </div>
-          <div className="font-heading" style={{ fontSize: '28px', color: '#ffffff' }}>
-            $85,240.00
+          <div
+            className="font-heading"
+            style={{ fontSize: "28px", color: "#ffffff" }}
+          >
+            $
+            {currentUser?.balance.toLocaleString("en-US", {
+              minimumFractionDigits: 2,
+            }) || "0.00"}
           </div>
-          <div className="flex items-center gap-1 mt-2" style={{ color: '#10b981', fontSize: '14px' }}>
+          <div
+            className="flex items-center gap-1 mt-2"
+            style={{ color: "#10b981", fontSize: "14px" }}
+          >
             <TrendingUp className="w-4 h-4" />
             <span>+8.2%</span>
           </div>
@@ -115,13 +162,21 @@ export function DashboardOverview() {
           className="p-6 rounded-xl bg-gradient-to-br from-[#141e32]/60 to-[#0a0e1a]/60 backdrop-blur-xl border border-[#c9a84c]/20"
         >
           <div className="flex items-center justify-between mb-4">
-            <div style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Current Account</div>
+            <div style={{ color: "rgba(255, 255, 255, 0.7)" }}>
+              Current Account
+            </div>
             <CreditCard className="w-5 h-5 text-[#3b82f6]" />
           </div>
-          <div className="font-heading" style={{ fontSize: '28px', color: '#ffffff' }}>
-            $40,190.00
+          <div
+            className="font-heading"
+            style={{ fontSize: "28px", color: "#ffffff" }}
+          >
+            $0.00
           </div>
-          <div className="flex items-center gap-1 mt-2" style={{ color: '#10b981', fontSize: '14px' }}>
+          <div
+            className="flex items-center gap-1 mt-2"
+            style={{ color: "#10b981", fontSize: "14px" }}
+          >
             <TrendingUp className="w-4 h-4" />
             <span>+5.1%</span>
           </div>
@@ -134,13 +189,19 @@ export function DashboardOverview() {
           className="p-6 rounded-xl bg-gradient-to-br from-[#141e32]/60 to-[#0a0e1a]/60 backdrop-blur-xl border border-[#c9a84c]/20"
         >
           <div className="flex items-center justify-between mb-4">
-            <div style={{ color: 'rgba(255, 255, 255, 0.7)' }}>Total Spent</div>
+            <div style={{ color: "rgba(255, 255, 255, 0.7)" }}>Total Spent</div>
             <DollarSign className="w-5 h-5 text-[#ef4444]" />
           </div>
-          <div className="font-heading" style={{ fontSize: '28px', color: '#ffffff' }}>
-            $12,850.00
+          <div
+            className="font-heading"
+            style={{ fontSize: "28px", color: "#ffffff" }}
+          >
+            $0.00
           </div>
-          <div className="flex items-center gap-1 mt-2" style={{ color: '#ef4444', fontSize: '14px' }}>
+          <div
+            className="flex items-center gap-1 mt-2"
+            style={{ color: "#ef4444", fontSize: "14px" }}
+          >
             <TrendingDown className="w-4 h-4" />
             <span>This month</span>
           </div>
@@ -154,7 +215,10 @@ export function DashboardOverview() {
         transition={{ delay: 0.6 }}
         className="p-6 rounded-xl bg-gradient-to-br from-[#141e32]/60 to-[#0a0e1a]/60 backdrop-blur-xl border border-[#c9a84c]/20"
       >
-        <h2 className="font-heading mb-6" style={{ fontSize: '24px', color: '#ffffff' }}>
+        <h2
+          className="font-heading mb-6"
+          style={{ fontSize: "24px", color: "#ffffff" }}
+        >
           Recent Transactions
         </h2>
         <div className="space-y-4">
@@ -167,7 +231,9 @@ export function DashboardOverview() {
                 <div className="flex items-center gap-4">
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                      transaction.amount > 0 ? 'bg-[#10b981]/20' : 'bg-[#ef4444]/20'
+                      transaction.amount > 0
+                        ? "bg-[#10b981]/20"
+                        : "bg-[#ef4444]/20"
                     }`}
                   >
                     {transaction.amount > 0 ? (
@@ -177,33 +243,56 @@ export function DashboardOverview() {
                     )}
                   </div>
                   <div>
-                    <div style={{ color: '#ffffff' }}>{transaction.description}</div>
-                    <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>{transaction.date} {transaction.time}</div>
+                    <div style={{ color: "#ffffff" }}>
+                      {transaction.description}
+                    </div>
+                    <div
+                      style={{
+                        fontSize: "14px",
+                        color: "rgba(255, 255, 255, 0.5)",
+                      }}
+                    >
+                      {transaction.date} {transaction.time}
+                    </div>
                   </div>
                 </div>
                 <div className="text-right">
                   <div
                     className="font-heading"
                     style={{
-                      fontSize: '18px',
-                      color: transaction.amount > 0 ? '#10b981' : '#ef4444',
+                      fontSize: "18px",
+                      color: transaction.amount > 0 ? "#10b981" : "#ef4444",
                     }}
                   >
-                    {transaction.amount > 0 ? '+' : ''}${Math.abs(transaction.amount).toLocaleString()}
+                    {transaction.amount > 0 ? "+" : ""}$
+                    {Math.abs(transaction.amount).toLocaleString()}
                   </div>
-                  <div style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.5)' }}>{transaction.status}</div>
+                  <div
+                    style={{
+                      fontSize: "14px",
+                      color: "rgba(255, 255, 255, 0.5)",
+                    }}
+                  >
+                    {transaction.status}
+                  </div>
                 </div>
               </div>
             ))
           ) : (
-            <div className="text-center py-8" style={{ color: 'rgba(255, 255, 255, 0.5)' }}>
+            <div
+              className="text-center py-8"
+              style={{ color: "rgba(255, 255, 255, 0.5)" }}
+            >
               No recent transactions
             </div>
           )}
         </div>
       </motion.div>
 
-      <WithdrawModal isOpen={isWithdrawModalOpen} onClose={() => setIsWithdrawModalOpen(false)} />
+      <WithdrawModal
+        isOpen={isWithdrawModalOpen}
+        onClose={() => setIsWithdrawModalOpen(false)}
+      />
     </div>
   );
 }

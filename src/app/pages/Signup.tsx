@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router';
-import { Shield, Mail, Lock, User, Eye, EyeOff, Phone } from 'lucide-react';
-import { motion } from 'motion/react';
-import { useAppContext } from '../context/AppContext';
+import { useState } from "react";
+import { Link, useNavigate } from "react-router";
+import { Shield, Mail, Lock, User, Eye, EyeOff, Phone } from "lucide-react";
+import { motion } from "motion/react";
+import { useAppContext } from "../context/AppContext";
 
 export function Signup() {
   const { addUser, setCurrentUser, users } = useAppContext();
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
@@ -19,15 +19,15 @@ export function Signup() {
   const handleSignup = (e: React.FormEvent) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert('Passwords do not match');
+      alert("Passwords do not match");
       return;
     }
     if (!agreedToTerms) {
-      alert('Please agree to the terms and conditions');
+      alert("Please agree to the terms and conditions");
       return;
     }
-    if (users.find(u => u.email === email)) {
-      alert('Email already exists');
+    if (users.find((u) => u.email === email)) {
+      alert("Email already exists");
       return;
     }
 
@@ -37,17 +37,18 @@ export function Signup() {
       email,
       password,
       balance: 0,
-      status: 'Active',
-      accountType: 'Basic'
+      status: "Active",
+      accountType: "Basic",
     });
 
     // Find the newly created user and set as current
-    const newUser = users.find(u => u.email === email) || users[users.length - 1];
+    const newUser =
+      users.find((u) => u.email === email) || users[users.length - 1];
     if (newUser) {
       setCurrentUser(newUser);
     }
 
-    navigate('/dashboard');
+    navigate("/login");
   };
 
   return (
@@ -68,14 +69,22 @@ export function Signup() {
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#c9a84c] to-[#3b82f6] flex items-center justify-center">
               <Shield className="w-6 h-6 text-[#0a0e1a]" />
             </div>
-            <span className="font-heading" style={{ fontSize: '28px', color: '#c9a84c' }}>
+            <span
+              className="font-heading"
+              style={{ fontSize: "28px", color: "#c9a84c" }}
+            >
               Fintech
             </span>
           </Link>
-          <h1 className="font-heading mb-2" style={{ fontSize: '32px', color: '#ffffff' }}>
+          <h1
+            className="font-heading mb-2"
+            style={{ fontSize: "32px", color: "#ffffff" }}
+          >
             Create Account
           </h1>
-          <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Start your journey with us</p>
+          <p style={{ color: "rgba(255, 255, 255, 0.6)" }}>
+            Start your journey with us
+          </p>
         </div>
 
         {/* Signup Form */}
@@ -83,7 +92,10 @@ export function Signup() {
           <form onSubmit={handleSignup} className="space-y-4">
             {/* Full Name */}
             <div>
-              <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <label
+                className="block mb-2"
+                style={{ color: "rgba(255, 255, 255, 0.7)" }}
+              >
                 Full Name
               </label>
               <div className="relative">
@@ -101,7 +113,10 @@ export function Signup() {
 
             {/* Email */}
             <div>
-              <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <label
+                className="block mb-2"
+                style={{ color: "rgba(255, 255, 255, 0.7)" }}
+              >
                 Email Address
               </label>
               <div className="relative">
@@ -119,7 +134,10 @@ export function Signup() {
 
             {/* Phone */}
             <div>
-              <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <label
+                className="block mb-2"
+                style={{ color: "rgba(255, 255, 255, 0.7)" }}
+              >
                 Phone Number
               </label>
               <div className="relative">
@@ -137,13 +155,16 @@ export function Signup() {
 
             {/* Password */}
             <div>
-              <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <label
+                className="block mb-2"
+                style={{ color: "rgba(255, 255, 255, 0.7)" }}
+              >
                 Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
                 <input
-                  type={showPassword ? 'text' : 'password'}
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Create a password"
@@ -155,20 +176,27 @@ export function Signup() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
                 >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
 
             {/* Confirm Password */}
             <div>
-              <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <label
+                className="block mb-2"
+                style={{ color: "rgba(255, 255, 255, 0.7)" }}
+              >
                 Confirm Password
               </label>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-white/40" />
                 <input
-                  type={showConfirmPassword ? 'text' : 'password'}
+                  type={showConfirmPassword ? "text" : "password"}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   placeholder="Confirm your password"
@@ -180,7 +208,11 @@ export function Signup() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                   className="absolute right-4 top-1/2 -translate-y-1/2 text-white/40 hover:text-white transition-colors"
                 >
-                  {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  {showConfirmPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
@@ -193,12 +225,14 @@ export function Signup() {
                 onChange={(e) => setAgreedToTerms(e.target.checked)}
                 className="w-4 h-4 mt-1 rounded border-[#c9a84c]/20"
               />
-              <label style={{ fontSize: '14px', color: 'rgba(255, 255, 255, 0.7)' }}>
-                I agree to the{' '}
+              <label
+                style={{ fontSize: "14px", color: "rgba(255, 255, 255, 0.7)" }}
+              >
+                I agree to the{" "}
                 <a href="#" className="text-[#c9a84c] hover:text-[#b89640]">
                   Terms & Conditions
-                </a>{' '}
-                and{' '}
+                </a>{" "}
+                and{" "}
                 <a href="#" className="text-[#c9a84c] hover:text-[#b89640]">
                   Privacy Policy
                 </a>
@@ -216,8 +250,13 @@ export function Signup() {
 
           {/* Login Link */}
           <div className="mt-6 text-center">
-            <span style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Already have an account? </span>
-            <Link to="/login" className="text-[#c9a84c] hover:text-[#b89640] transition-colors">
+            <span style={{ color: "rgba(255, 255, 255, 0.6)" }}>
+              Already have an account?{" "}
+            </span>
+            <Link
+              to="/login"
+              className="text-[#c9a84c] hover:text-[#b89640] transition-colors"
+            >
               Sign in
             </Link>
           </div>
@@ -225,7 +264,10 @@ export function Signup() {
 
         {/* Back to Home */}
         <div className="mt-6 text-center">
-          <Link to="/" className="text-white/60 hover:text-[#c9a84c] transition-colors">
+          <Link
+            to="/"
+            className="text-white/60 hover:text-[#c9a84c] transition-colors"
+          >
             ← Back to Home
           </Link>
         </div>

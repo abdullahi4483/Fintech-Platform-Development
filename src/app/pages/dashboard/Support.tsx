@@ -1,20 +1,20 @@
-import { useState } from 'react';
-import { Send, MessageCircle, Mail, Phone } from 'lucide-react';
-import { motion } from 'motion/react';
-import { useAppContext } from '../../context/AppContext';
+import { useState } from "react";
+import { Send, MessageCircle, Mail, Phone } from "lucide-react";
+import { motion } from "motion/react";
+import { useAppContext } from "../../context/AppContext";
 
 export function Support() {
   const { currentUser, addMessage } = useAppContext();
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
-  const [category, setCategory] = useState('General');
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [category, setCategory] = useState("General");
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!currentUser) {
-      alert('Please log in first');
+      alert("Please log in first");
       return;
     }
 
@@ -24,14 +24,14 @@ export function Support() {
       email: currentUser.email,
       category,
       subject,
-      message
+      message,
     });
 
     setSubmitted(true);
     setTimeout(() => {
-      setSubject('');
-      setMessage('');
-      setCategory('General');
+      setSubject("");
+      setMessage("");
+      setCategory("General");
       setSubmitted(false);
     }, 3000);
   };
@@ -39,10 +39,15 @@ export function Support() {
   return (
     <div>
       <div className="mb-8">
-        <h1 className="font-heading mb-2" style={{ fontSize: '36px', color: '#ffffff' }}>
+        <h1
+          className="font-heading mb-2"
+          style={{ fontSize: "36px", color: "#ffffff" }}
+        >
           Customer Support
         </h1>
-        <p style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Send us a message and we'll get back to you</p>
+        <p style={{ color: "rgba(255, 255, 255, 0.6)" }}>
+          Send us a message and we'll get back to you
+        </p>
       </div>
 
       <div className="grid md:grid-cols-3 gap-6">
@@ -56,10 +61,15 @@ export function Support() {
             <div className="w-12 h-12 mb-4 rounded-full bg-[#c9a84c]/20 flex items-center justify-center">
               <Mail className="w-6 h-6 text-[#c9a84c]" />
             </div>
-            <h3 className="font-heading mb-2" style={{ fontSize: '20px', color: '#ffffff' }}>
+            <h3
+              className="font-heading mb-2"
+              style={{ fontSize: "20px", color: "#ffffff" }}
+            >
               Email
             </h3>
-            <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px' }}>support@fintech.com</p>
+            <p style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "14px" }}>
+              support@recoverytrustbank.com
+            </p>
           </motion.div>
 
           <motion.div
@@ -71,10 +81,15 @@ export function Support() {
             <div className="w-12 h-12 mb-4 rounded-full bg-[#3b82f6]/20 flex items-center justify-center">
               <Phone className="w-6 h-6 text-[#3b82f6]" />
             </div>
-            <h3 className="font-heading mb-2" style={{ fontSize: '20px', color: '#ffffff' }}>
+            <h3
+              className="font-heading mb-2"
+              style={{ fontSize: "20px", color: "#ffffff" }}
+            >
               Phone
             </h3>
-            <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px' }}>+1 (555) 123-4567</p>
+            <p style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "14px" }}>
+              +1 (210) 549-7025
+            </p>
           </motion.div>
 
           <motion.div
@@ -86,10 +101,15 @@ export function Support() {
             <div className="w-12 h-12 mb-4 rounded-full bg-[#10b981]/20 flex items-center justify-center">
               <MessageCircle className="w-6 h-6 text-[#10b981]" />
             </div>
-            <h3 className="font-heading mb-2" style={{ fontSize: '20px', color: '#ffffff' }}>
+            <h3
+              className="font-heading mb-2"
+              style={{ fontSize: "20px", color: "#ffffff" }}
+            >
               Live Chat
             </h3>
-            <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px' }}>Available 24/7</p>
+            <p style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "14px" }}>
+              Available 24/7
+            </p>
           </motion.div>
         </div>
 
@@ -100,7 +120,10 @@ export function Support() {
           transition={{ delay: 0.3 }}
           className="md:col-span-2 p-8 rounded-xl bg-gradient-to-br from-[#141e32]/60 to-[#0a0e1a]/60 backdrop-blur-xl border border-[#c9a84c]/20"
         >
-          <h2 className="font-heading mb-6" style={{ fontSize: '24px', color: '#ffffff' }}>
+          <h2
+            className="font-heading mb-6"
+            style={{ fontSize: "24px", color: "#ffffff" }}
+          >
             Send Us a Message
           </h2>
 
@@ -113,10 +136,13 @@ export function Support() {
               <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#10b981]/20 flex items-center justify-center">
                 <MessageCircle className="w-8 h-8 text-[#10b981]" />
               </div>
-              <h3 className="font-heading mb-2" style={{ fontSize: '24px', color: '#ffffff' }}>
+              <h3
+                className="font-heading mb-2"
+                style={{ fontSize: "24px", color: "#ffffff" }}
+              >
                 Message Sent!
               </h3>
-              <p style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+              <p style={{ color: "rgba(255, 255, 255, 0.7)" }}>
                 We've received your message and will respond within 24 hours.
               </p>
             </motion.div>
@@ -124,7 +150,10 @@ export function Support() {
             <form onSubmit={handleSubmit} className="space-y-4">
               {/* Category */}
               <div>
-                <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                <label
+                  className="block mb-2"
+                  style={{ color: "rgba(255, 255, 255, 0.7)" }}
+                >
                   Category
                 </label>
                 <select
@@ -143,7 +172,10 @@ export function Support() {
 
               {/* Subject */}
               <div>
-                <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                <label
+                  className="block mb-2"
+                  style={{ color: "rgba(255, 255, 255, 0.7)" }}
+                >
                   Subject
                 </label>
                 <input
@@ -158,7 +190,10 @@ export function Support() {
 
               {/* Message */}
               <div>
-                <label className="block mb-2" style={{ color: 'rgba(255, 255, 255, 0.7)' }}>
+                <label
+                  className="block mb-2"
+                  style={{ color: "rgba(255, 255, 255, 0.7)" }}
+                >
                   Message
                 </label>
                 <textarea
@@ -191,34 +226,47 @@ export function Support() {
         transition={{ delay: 0.4 }}
         className="mt-8 p-8 rounded-xl bg-gradient-to-br from-[#141e32]/60 to-[#0a0e1a]/60 backdrop-blur-xl border border-[#c9a84c]/20"
       >
-        <h2 className="font-heading mb-6" style={{ fontSize: '24px', color: '#ffffff' }}>
+        <h2
+          className="font-heading mb-6"
+          style={{ fontSize: "24px", color: "#ffffff" }}
+        >
           Frequently Asked Questions
         </h2>
 
         <div className="space-y-4">
           {[
             {
-              q: 'How long does it take to process a withdrawal?',
-              a: 'Withdrawals are typically processed within 1-3 business days after verification.',
+              q: "How long does it take to process a withdrawal?",
+              a: "Withdrawals are typically processed within 1-3 business days after verification.",
             },
             {
-              q: 'What documents do I need for verification?',
-              a: 'You need a valid government-issued ID and proof of address (utility bill or bank statement).',
+              q: "What documents do I need for verification?",
+              a: "You need a valid government-issued ID and proof of address (utility bill or bank statement).",
             },
             {
-              q: 'Are there any fees for transactions?',
-              a: 'Internal transfers are free. External transfers may have standard banking fees.',
+              q: "Are there any fees for transactions?",
+              a: "Internal transfers are free. External transfers may have standard banking fees.",
             },
             {
-              q: 'How can I increase my account limits?',
-              a: 'Contact support with your account details and we can review your limit increase request.',
+              q: "How can I increase my account limits?",
+              a: "Contact support with your account details and we can review your limit increase request.",
             },
           ].map((faq, index) => (
-            <div key={index} className="p-4 rounded-lg bg-white/5 border border-white/10">
-              <h3 className="font-heading mb-2" style={{ fontSize: '16px', color: '#c9a84c' }}>
+            <div
+              key={index}
+              className="p-4 rounded-lg bg-white/5 border border-white/10"
+            >
+              <h3
+                className="font-heading mb-2"
+                style={{ fontSize: "16px", color: "#c9a84c" }}
+              >
                 {faq.q}
               </h3>
-              <p style={{ color: 'rgba(255, 255, 255, 0.7)', fontSize: '14px' }}>{faq.a}</p>
+              <p
+                style={{ color: "rgba(255, 255, 255, 0.7)", fontSize: "14px" }}
+              >
+                {faq.a}
+              </p>
             </div>
           ))}
         </div>

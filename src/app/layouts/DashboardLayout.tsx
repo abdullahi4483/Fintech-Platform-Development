@@ -1,19 +1,34 @@
-import { Outlet, Link, useLocation } from 'react-router';
-import { LayoutDashboard, Wallet, CreditCard, Settings, LogOut, Menu, X, MessageCircle, ArrowLeftRight } from 'lucide-react';
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { Outlet, Link, useLocation } from "react-router";
+import {
+  LayoutDashboard,
+  Wallet,
+  CreditCard,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  MessageCircle,
+  ArrowLeftRight,
+} from "lucide-react";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 
 export function DashboardLayout() {
   const location = useLocation();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navItems = [
-    { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { path: '/dashboard/accounts', label: 'Accounts', icon: Wallet },
-    { path: '/dashboard/transactions', label: 'Transactions', icon: ArrowLeftRight },
-    { path: '/dashboard/cards', label: 'Cards', icon: CreditCard },
-    { path: '/dashboard/support', label: 'Support', icon: MessageCircle },
-    { path: '/dashboard/settings', label: 'Settings', icon: Settings },
+    { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { path: "/dashboard/accounts", label: "Accounts", icon: Wallet },
+    {
+      path: "/dashboard/transactions",
+      label: "Transactions",
+      icon: ArrowLeftRight,
+    },
+    { path: "/dashboard/cards", label: "Cards", icon: CreditCard },
+    { path: "/dashboard/support", label: "Support", icon: MessageCircle },
+    { path: "/dashboard/settings", label: "Settings", icon: Settings },
   ];
 
   return (
@@ -23,7 +38,11 @@ export function DashboardLayout() {
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         className="fixed top-4 left-4 z-50 md:hidden p-2 rounded-lg bg-[#141e32]/80 backdrop-blur-xl border border-[#c9a84c]/20 text-white"
       >
-        {isSidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        {isSidebarOpen ? (
+          <X className="w-6 h-6" />
+        ) : (
+          <Menu className="w-6 h-6" />
+        )}
       </button>
 
       {/* Sidebar */}
@@ -39,7 +58,10 @@ export function DashboardLayout() {
               <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#c9a84c] to-[#3b82f6] flex items-center justify-center">
                 <Wallet className="w-5 h-5 text-[#0a0e1a]" />
               </div>
-              <span className="font-heading" style={{ fontSize: '24px', color: '#c9a84c' }}>
+              <span
+                className="font-heading"
+                style={{ fontSize: "24px", color: "#c9a84c" }}
+              >
                 Fintech
               </span>
             </div>
@@ -54,8 +76,8 @@ export function DashboardLayout() {
                     onClick={() => setIsSidebarOpen(false)}
                     className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
                       isActive
-                        ? 'bg-[#c9a84c]/20 text-[#c9a84c] border border-[#c9a84c]/40'
-                        : 'text-white/70 hover:bg-white/5 hover:text-white'
+                        ? "bg-[#c9a84c]/20 text-[#c9a84c] border border-[#c9a84c]/40"
+                        : "text-white/70 hover:bg-white/5 hover:text-white"
                     }`}
                   >
                     <item.icon className="w-5 h-5" />
